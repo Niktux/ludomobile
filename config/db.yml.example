@@ -1,0 +1,3 @@
+db:
+  user : ludo_user
+  password: myPassword

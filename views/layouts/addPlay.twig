@@ -1,0 +1,13 @@
+{% extends 'layouts/main.twig' %}
+
+{% block content %}
+<form method="post" action="{% block formAction %}/games/{{ game.idjeu }}/select/players{% endblock %}">
+    <fieldset>
+        <legend>
+            <img class="game_thumbnail" src="{{ game.thumbnail }}" /> {{ game.jeu }}
+        </legend><br/>
+        {% block formContent %}
+        {% endblock %}
+  </fieldset>
+</form>
+{% endblock %}

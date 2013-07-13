@@ -1,0 +1,19 @@
+{% extends 'layouts/addPlay.twig' %}
+
+{% block formAction %}/games/{{ game.idjeu }}/scores{% endblock %}
+
+{% block formContent %}
+    {% for profile in profiles %}
+        {% for image in profile.images %}
+           {% set name = profile.noms[loop.index0] %}
+           <img class="profil" src="{{ image }}" alt="{{ name }}" title="{{ name }}">
+        {% endfor %}
+        <button type="submit" class="btn btn-mini" name="profil" value="{{ profile.profilId }}"><i class="icon-ok"></i></button>
+        <br/>
+    {% endfor %}
+    
+    {% for field, value in postFields %}
+        <input type="hidden" name="{{ field }}" value="{{ value }}" />
+    {% endfor %}
+    
+{% endblock %}

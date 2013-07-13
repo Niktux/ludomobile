@@ -1,0 +1,56 @@
+table.letters td, div.center {
+    text-align: center;
+}
+
+img.game_thumbnail {
+    max-height: 80px;
+    max-width: 80px;
+}
+
+a.normal {
+    color: #333;
+}
+      
+div.saisie_partie_extensions {
+    width: 70px;
+    float: left;
+    text-align: center;
+    padding: 5px;
+    border: 2px solid #fff;
+}
+
+div.saisie_partie_extensions_selected {
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border: 2px solid  #feb807;
+    background-color: #feb807;
+}
+div.saisie_partie_extensions img {
+    max-width: 60px;
+    max-height: 60px;
+}
+
+img.profil {
+	height: 58px;
+	border: none;
+	margin-right: -2px;
+	margin-left: -2px;
+	margin-bottom: 3px;
+}
+
+.form-signin {
+    max-width: 260px;
+    margin: 0 auto 10px;
+}
+
+.form-signin .form-signin-heading {
+    margin-bottom: 10px;
+}
+      
+.form-signin input[type="text"],
+.form-signin input[type="password"] {
+    font-size: 14px;
+    height: auto;
+    margin-bottom: 15px;
+    padding: 7px 9px;
+}

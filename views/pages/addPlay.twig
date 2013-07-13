@@ -1,0 +1,94 @@
+{% extends 'layouts/addPlay.twig' %}
+
+{% block formAction %}/games/{{ game.idjeu }}/select/players{% endblock %}
+    
+{% block formContent %}
+        {# ----------------------------------------------------------------- #}
+        {# Nb Players #}
+        {# ----------------------------------------------------------------- #}
+        {% if game.jmax - game.jmin < 8 %}
+            <div class="btn-group" data-toggle="buttons-radio" data-toggle-name="nbPlayers" >
+                {% for j in game.jmin..game.jmax %}
+                    <button type="button" class="btn{% if loop.first %} active{% endif %}" value="{{ j }}">{{ j }}</button>
+                {% endfor %}
+                <input type="hidden" name="nbPlayers" value="{{ game.jmin }}" />
+            </div>
+        {% else %}
+            <div class="input-prepend">
+                <span class="add-on"><i class="icon-user"></i></span>
+                <input class="span2" id="inputIcon" type="text" name="nbPlayers" value="{{ game.jmin }}">
+            </div>
+        {% endif %}
+        
+        <hr>
+        
+        {# ----------------------------------------------------------------- #}
+        {# Play date #}
+        {# ----------------------------------------------------------------- #}
+        <div class="input-prepend">
+            <span class="add-on"><i class="icon-calendar"></i></span>
+            <input class="span2" id="inputIcon" type="text" name="date" value="{{ date()|date_modify("-6 hours")|date('Y-m-d') }}">
+        </div>
+        
+        <button type="submit" class="btn">Saisir</button>
+        
+        <hr>
+        
+        {# ----------------------------------------------------------------- #}
+        {# Extensions #}
+        {# ----------------------------------------------------------------- #}
+        <div id="block_extensions" class="form_block_multiple">
+            {% for extension in extensions %}
+                <div class="saisie_partie_extensions">
+                    <img class="game_miniature" name="img_extensions" src="{{ extension.thumbnail }}" image_val="{{ extension.idjeu }}" />
+                </div>
+            {% endfor %}
+            <input type="hidden" id="val_extensions" name="extensions" value="-1" >
+        </div>
+{% endblock %}
+
+
+{% block jsFooter %}
+    {% if game.jmax - game.jmin < 8 %}
+    <script type="text/javascript">
+    <!--
+        $(function() {
+            $('div.btn-group[data-toggle-name]').each(function() {
+                var group = $(this);
+                var form = group.parents('form').eq(0);
+                var name = group.attr('data-toggle-name');
+                var hidden = $('input[name="' + name + '"]', form);
+                $('button', group).each(function() {
+                    var button = $(this);
+                    button.on('click', function() {
+                        hidden.val($(this).val());
+                    });
+                    if (button.val() == hidden.val()) {
+                        button.addClass('active');
+                    }
+                });
+            });
+        });
+    //-->
+    </script>
+    {% endif %}
+    
+	<script type="text/javascript">
+    <!--
+		$(document).ready(function(){
+			$("img[name='img_extensions']").click(function(){
+				$(this).parent().toggleClass("saisie_partie_extensions_selected");
+				$(this).toggleClass("saisie_partie_extensions_selected");
+				
+				var all_value = "-1";
+				$("#block_extensions img.saisie_partie_extensions_selected").each(function(){
+
+					var value = $(this).attr('image_val');
+					all_value = all_value + ',' + value;
+				});
+				$('#val_extensions').val(all_value);
+			});
+		});
+	    //-->
+		</script>
+{% endblock %}
