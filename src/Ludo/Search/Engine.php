@@ -5,11 +5,13 @@ namespace Ludo\Search;
 class Engine
 {
      private
+        $games,
         $db;
     
-    public function __construct(\Doctrine\DBAL\Driver\Connection $db)
+    public function __construct(\Doctrine\DBAL\Driver\Connection $db, \Ludo\Model\Games $games)
     {
         $this->db = $db;
+        $this->games = $games;
     }
 
     public function gamesByName(Patterns\Pattern $filter)
@@ -23,6 +25,6 @@ class Engine
             $filter->sql('jeu')
         );
         
-        return \Ludo\Model\Games::convertRows($this->db->fetchAll($query));
+        return $this->games->convertRows($this->db->fetchAll($query));
     }
 }

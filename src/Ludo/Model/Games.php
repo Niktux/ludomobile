@@ -4,15 +4,13 @@ namespace Ludo\Model;
 
 class Games
 {
-    const
-        IMAGES_DOMAIN_NAME = 'http://nico.ludotheque.net/';
-    
     private
         $db;
     
-    public function __construct(\Doctrine\DBAL\Connection $db)
+    public function __construct(\Doctrine\DBAL\Connection $db, $domain)
     {
         $this->db = $db;
+        $this->domain = rtrim($domain, '/') . '/';
     }
     
     public function fetchById($gameId)
@@ -24,7 +22,7 @@ class Games
             $gameId
         );
         
-        return self::convertRow($this->db->fetchAssoc($query));
+        return $this->convertRow($this->db->fetchAssoc($query));
     }
     
     public function fetchExtensions($gameId)
@@ -37,7 +35,7 @@ class Games
             $gameId
         );
         
-        return self::convertRows($this->db->fetchAll($query));
+        return $this->convertRows($this->db->fetchAll($query));
     }
     
     public function fetchProfiles($nbPlayers, $nbProfiles = 13)
@@ -78,11 +76,11 @@ class Games
         array_walk($profiles, function(&$profile){
             $profile['profilId'] = str_replace(',', 'j', $profile['profil']);
             $profile['noms'] = explode(',', $profile['profil_nom']);
-            $profile['images'] = explode(',', self::translateImagePath($profile['profil_image']));
+            $profile['images'] = explode(',', $this->translateImagePath($profile['profil_image']));
             array_walk($profile['images'], function(&$image) {
                if(empty($image))
                {
-                   $image = self::IMAGES_DOMAIN_NAME . 'images/profil.gif';
+                   $image = $this->domain . 'images/profil.gif';
                }
             });
         });
@@ -109,38 +107,38 @@ class Games
         return $this->db->fetchAll($query);
     }
     
-    public static function convertRows(array $games)
+    public function convertRows(array $games)
     {
         $filteredResult = array();
     
         foreach($games as $game)
         {
-            $filteredResult[] = self::convertRow($game);
+            $filteredResult[] = $this->convertRow($game);
         }
     
         return $filteredResult;
     }
     
-    public static function convertRow($game)
+    public function convertRow($game)
     {
         if(isset($game['thumbnail']))
         {
-            $game['thumbnail'] = self::translateImagePath($game['thumbnail']);
+            $game['thumbnail'] = $this->translateImagePath($game['thumbnail']);
         }
         if(isset($game['name']))
         {
-            $game['name'] = self::filterName($game['name']);
+            $game['name'] = $this->filterName($game['name']);
         }
         
         return $game;
     }
     
-    private static function translateImagePath($imagePath)
+    private function translateImagePath($imagePath)
     {
-        return  str_replace('./', self::IMAGES_DOMAIN_NAME, $imagePath);
+        return  str_replace('./', $this->domain, $imagePath);
     }
     
-    private static function filterName($name)
+    private function filterName($name)
     {
         return str_replace('&apos;', "'", $name);
     }

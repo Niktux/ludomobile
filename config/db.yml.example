@@ -1,3 +1,4 @@
 db:
   user : ludo_user
   password: myPassword
+domain: http://www.example.org

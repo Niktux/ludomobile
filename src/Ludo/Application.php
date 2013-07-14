@@ -130,11 +130,11 @@ class Application extends \Silex\Application
         $app = $this;
         
         $this['searchEngine'] = function() use($app) {
-            return new Search\Engine($app['db']);
+            return new Search\Engine($app['db'], $app['games']);
         };
         
         $this['games'] = function() use($app) {
-            return new Model\Games($app['db']);
+            return new Model\Games($app['db'], $app->configuration['domain']);
         };
         
     }
