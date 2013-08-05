@@ -1,0 +1,34 @@
+{% extends 'layouts/addPlay.twig' %}
+{% import "macros/rank.twig" as selectors %}
+
+{% block formAction %}/games/{{ game.idjeu }}/scores{% endblock %}
+
+{% block formContent %}
+    
+<ul class="media-list">
+    {% for player in players %}
+        {% set playerRank = "player" ~ loop.index  %}
+
+        <li class="media">
+            <a class="pull-left" href="#">
+                <img class="profil media-object" src="{{ player.image }}">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading">{{ player.name }}</h4>
+                <input type="hidden" name="{{ playerRank }}" value="{{ player.id }}"}>
+                <div class="btn-group span2" data-toggle="buttons-radio">
+                    <button type="button" class="btn btn-success">G</button>
+                    <button type="button" class="btn btn-danger active">P</button>
+                </div>
+                {{ selectors.rank(players|length, 'rank' ~ player.id) }}
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+
+<div class="form-actions">
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a href="/" class="btn ">Retour</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% macro integerSelector(imin, imax, name) %}
+    {% if imax - imin < 8 %}
+        <div class="btn-group" data-toggle="buttons-radio" data-toggle-name="nbPlayers" >
+            {% for j in imin..imax %}
+                <button type="button" class="btn{% if loop.first %} active{% endif %}" value="{{ j }}">{{ j }}</button>
+            {% endfor %}
+            <input type="hidden" name="{{ name }}" value="{{ imin }}" />
+        </div>
+    {% else %}
+        <div class="input-prepend">
+            <span class="add-on"><i class="icon-user"></i></span>
+            <select class="input-small" name="{{ name }}">
+            {% for j in imin..imax %}
+                <option value="{{ j }}">{{ j }}</option>
+            {% endfor %}
+            </select>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro rank(nbplayers, name) %}
+    {% import _self as self %}
+    {{ self.integerSelector(1, nbplayers, name) }}
+{% endmacro %}

@@ -125,6 +125,10 @@ class Games
         {
             $game['thumbnail'] = $this->translateImagePath($game['thumbnail']);
         }
+        if(isset($game['image']))
+        {
+            $game['image'] = $this->translateImagePath($game['image']);
+        }
         if(isset($game['name']))
         {
             $game['name'] = $this->filterName($game['name']);
@@ -135,11 +139,28 @@ class Games
     
     private function translateImagePath($imagePath)
     {
+        if(empty($imagePath))
+        {
+            return $this->domain . 'images/profil.gif';
+        }
+        
         return  str_replace('./', $this->domain, $imagePath);
     }
     
     private function filterName($name)
     {
         return str_replace('&apos;', "'", $name);
+    }
+    
+    public function fetchPlayers(array $ids)
+    {
+        $query = sprintf(
+            "SELECT idjoueur AS id, image, nom AS name
+            FROM ludo_joueur
+            WHERE idjoueur IN (%s)",
+            implode(',', $ids)
+        );
+        
+        return $this->convertRows($this->db->fetchAll($query));
     }
 }

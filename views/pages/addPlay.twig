@@ -6,19 +6,8 @@
         {# ----------------------------------------------------------------- #}
         {# Nb Players #}
         {# ----------------------------------------------------------------- #}
-        {% if game.jmax - game.jmin < 8 %}
-            <div class="btn-group" data-toggle="buttons-radio" data-toggle-name="nbPlayers" >
-                {% for j in game.jmin..game.jmax %}
-                    <button type="button" class="btn{% if loop.first %} active{% endif %}" value="{{ j }}">{{ j }}</button>
-                {% endfor %}
-                <input type="hidden" name="nbPlayers" value="{{ game.jmin }}" />
-            </div>
-        {% else %}
-            <div class="input-prepend">
-                <span class="add-on"><i class="icon-user"></i></span>
-                <input class="span2" id="inputIcon" type="text" name="nbPlayers" value="{{ game.jmin }}">
-            </div>
-        {% endif %}
+        {% import "macros/rank.twig" as selectors %}
+        {{ selectors.integerSelector(game.jmin, game.jmax, 'nbPlayers') }}
         
         <hr>
         

@@ -47,6 +47,19 @@ class GameController
     
     public function scoresAction($gameId)
     {
-        var_dump($_POST);
+        $template = 'pages/scores/gagnantPerdant.twig';
+        $game = $this->games->fetchById($gameId);
+        
+        if($game['has_points'] === '1')
+        {
+            $template = 'pages/scores/points.twig';
+        }
+        
+        $html = $this->twig->render($template, array(
+            'game' => $game,
+            'players' => $this->games->fetchPlayers(explode('j', $this->request->get('profil'))),
+        ));
+        
+        return new Response($html);
     }
 }

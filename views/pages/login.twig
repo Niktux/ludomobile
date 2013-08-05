@@ -1,24 +1,26 @@
 {% extends 'layouts/main.twig' %}
 
 {% block content %}
-<form class="form-signin" action="{{ path('admin_login_check') }}" method="post">
-    <h2 class="form-signin-heading">Connexion</h2>
-    
-    {% if error is not empty %}
-        <div class="alert alert-error">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>ERROR : </strong>{{ error }}
-        </div>
-    {% endif %}
-    
-    <input type="text" class="input-block-level" name="_username" value="{{ last_username }}" placeholder="Login" />
-    <input type="password" class="input-block-level" name="_password" value="" placeholder="Password" />
-    <input type="hidden" name="_target_path" value="/"/>
-    
-    <label class="checkbox">
-        <input type="checkbox" id="remember_me" name="_remember_me" checked />  Remember me
-    </label>
-    
-    <button class="btn btn-large btn-primary" type="submit">Se connecter</button>
-</form>
+<div class="container">
+    <form class="form-signin" action="{{ path('admin_login_check') }}" method="post">
+        <h2 class="form-signin-heading">Connexion</h2>
+        
+        {% if error is not empty %}
+            <div class="alert alert-error">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>ERROR : </strong>{{ error }}
+            </div>
+        {% endif %}
+        
+        <input type="text" class="input-block-level" name="_username" value="{{ last_username }}" placeholder="Login" />
+        <input type="password" class="input-block-level" name="_password" value="" placeholder="Password" />
+        <input type="hidden" name="_target_path" value="/"/>
+        
+        <label class="checkbox">
+            <input type="checkbox" id="remember_me" name="_remember_me" checked />  Remember me
+        </label>
+        
+        <button class="btn btn-large btn-primary" type="submit">Se connecter</button>
+    </form>
+</div>
 {% endblock %}

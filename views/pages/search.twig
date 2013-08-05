@@ -1,29 +1,30 @@
 {% extends 'layouts/main.twig' %}
 
 {% block content %}
-    
+<div class="container">
     <div class="row">
-    <div class="span9 center well well-small"><strong>{{ games|length }} résultat(s)</strong></div>
-    <table class="table table-hover">
-    {% for game in games %}
-        {% set link = "/games/#{game.idjeu}/add/play" %}
-        <tr>
-            <td>
-                <a href="{{ link }}">
-                    <img class="media-object game_thumbnail img-rounded" src="{{ game.thumbnail }}">
-                </a>
-            </td>
-            <td>
-                <a class="normal" href="{{ link }}">
-                <div class="media-body">
-                    <h4 class="media-heading">{{ game.name|e('html') }}</h4>
-                    {{ game.duree }} min<br/>
-                    {{ game.jmin }}{% if game.jmax != game.jmin %}- {{ game.jmax }}{% endif %} joueurs
-                </div>
-                </a>
-            </td>
-        </tr>
-    {% endfor %}
+        <div class="span9 center well well-small"><strong>{{ games|length }} résultat(s)</strong></div>
+        <table class="table table-hover">
+        {% for game in games %}
+            {% set link = "/games/#{game.idjeu}/add/play" %}
+            <tr>
+                <td>
+                    <a href="{{ link }}">
+                        <img class="media-object game_thumbnail img-rounded" src="{{ game.thumbnail }}">
+                    </a>
+                </td>
+                <td>
+                    <a class="normal" href="{{ link }}">
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ game.name|e('html') }}</h4>
+                        {{ game.duree }} min<br/>
+                        {{ game.jmin }}{% if game.jmax != game.jmin %}- {{ game.jmax }}{% endif %} joueurs
+                    </div>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
     </div>
-    
+</div>
 {% endblock %}
