@@ -5,8 +5,9 @@ vendor
 config/db.yml
 
 # Runtime files
-cache/*
-logs/*
+var/cache/*
+var/logs/*
+web/var/*
 
 # Eclipse files
 .buildpath

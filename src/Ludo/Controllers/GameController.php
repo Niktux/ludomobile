@@ -21,8 +21,6 @@ class GameController
     
     public function postAddPlayAction($gameId)
     {
-        var_dump($_POST);
-
         return $this->addPlayAction($gameId);
     }
     
@@ -61,5 +59,34 @@ class GameController
         ));
         
         return new Response($html);
+    }
+    
+    public function saveAction($gameId)
+    {
+        $postFields = $this->request->request->all();
+
+        $message = "ERREUR";
+        if(isset($postFields['nbPlayers']))
+        {
+            $nbPlayers = trim($postFields['nbPlayers']);
+            
+            if(is_numeric($nbPlayers) && $nbPlayers > 0)
+            {
+                for($n = 1; $n <= $nbPlayers; $n++)
+                {
+                  //  var_dump($postFields["pts$n"]);
+                  // see iphone_profil.php
+                  // and iphone_assoc_joueurs_classement.php
+                }
+                
+                $message = "Partie enregistrée";
+            }
+        }
+        
+        return new Response($this->twig->render('pages/addPlay/confirmation.twig', array(
+            'game' => $this->games->fetchById($gameId),
+            'postFields' => $postFields,
+            'message' => $message,
+        )));
     }
 }

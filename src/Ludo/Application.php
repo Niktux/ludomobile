@@ -29,8 +29,16 @@ class Application extends \Silex\Application
         parent::__construct();
 
         $this['startTime'] = microtime(true);
-        $this['logs.path'] = __DIR__ . '/../../logs/';
-        $this['cache.path'] = __DIR__ . '/../../cache/';
+        $this['rootDir.path'] = __DIR__ . '/../../';
+        $this['var.path']   = $this['rootDir.path'] . 'var/';
+        
+        $this['logs.path']  = $this['var.path'] . 'logs/';
+        $this['cache.path'] = $this['var.path'] . 'cache/';
+        
+        $this['public_var.path'] = $this['rootDir.path'] . 'web/var/';
+        $this['images.path']     = $this['public_var.path'] . 'images/';
+        
+        $this['configuration'] = new \Puzzle\Configuration\Yaml($this['rootDir.path'] . 'config/');
         
         $this->loadConfiguration($configurationFile);
         $this->initializeDatabase();
@@ -61,7 +69,7 @@ class Application extends \Silex\Application
             'db.options' => array(
                 'driver'   => 'pdo_mysql',
                 'host'     => 'localhost',
-                'dbname'   => 'ludo',
+                'dbname'   => 'ludo_mobile',
                 'user'     => $this->configuration['db']['user'],
                 'password' => $this->configuration['db']['password'],
                 'charset'  => 'utf8'
@@ -121,13 +129,27 @@ class Application extends \Silex\Application
     {
         $this->register(new TwigServiceProvider(), array(
             'twig.path'    => array(__DIR__ . '/../../views'),
-            'twig.options' => array('cache' => $this['cache.path'] . 'twig'),
+            'twig.options' => array('cache' => false), //$this['cache.path']),
         ));
+        
+        $this['twig'] = $this->share($this->extend('twig', function($twig, $app) {
+            $twig->addExtension(new Twig\Extension($this['image']));
+            return $twig;
+        }));
     }
     
     private function initializeSpecificServices()
     {
         $app = $this;
+        
+        $this['imagine'] = $this->share(function() use($app){
+            return new \Imagine\Gd\Imagine();
+        });
+        
+        $this['images.format.path'] = $this['images.path'] . 'resized/';
+        $this['image'] = $this->share(function() use($app){
+            return new \Puzzle\Images\ImageHandler($app['configuration'], $app['imagine'], $app['images.format.path']);
+        });
         
         $this['searchEngine'] = function() use($app) {
             return new Search\Engine($app['db'], $app['games']);

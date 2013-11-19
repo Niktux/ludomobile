@@ -1,25 +1,25 @@
 {
-    "require":
-    {
-        "php": ">=5.3.3",
-        "silex/silex": "1.0.0",
-        "silex/web-profiler": "~1.0",
-        "symfony/console": "2.*",
-        "doctrine/dbal": "2.2.*",
-        "symfony/yaml": "~2.1",
-        "symfony/form": "~2.3",
-        "symfony/validator": "~2.3",
-        "symfony/config": "~2.3",
-        "symfony/translation": "~2.3",
-        "monolog/monolog": ">=1.0.0",
-        "symfony/security": "~2.3"
-    },
-    "require-dev":
-    {
-        "phpunit/phpunit": "3.7.*"
-    },
-    "autoload":
-    {
-        "psr-0": {"": "src/"}   
-    }
+	"require" : {
+		"symfony/console" : "2.*",
+		"monolog/monolog" : ">=1.0.0",
+		"symfony/security" : "~2.3",
+		"symfony/config" : "~2.3",
+		"symfony/validator" : "~2.3",
+		"doctrine/dbal" : "2.2.*",
+		"php" : ">=5.3.3",
+		"symfony/translation" : "~2.3",
+		"silex/web-profiler" : "~1.0",
+		"symfony/yaml" : "~2.1",
+		"symfony/form" : "~2.3",
+		"puzzle/images" : "0.1@dev",
+		"silex/silex" : "1.0.0"
+	},
+	"require-dev" : {
+		"phpunit/phpunit" : "3.7.*"
+	},
+	"autoload" : {
+		"psr-0" : {
+			"" : "src/"
+		}
+	}
 }

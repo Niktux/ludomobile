@@ -5,7 +5,7 @@
     <form class="{% block formClass %}{% endblock %}" method="post" action="{% block formAction %}/games/{{ game.idjeu }}/select/players{% endblock %}">
         <fieldset>
             <legend>
-                <img class="game_thumbnail" src="{{ game.thumbnail }}" /> {{ game.jeu }}
+                <img class="game_thumbnail" src="{{ game.thumbnail|image('game_thumbnail') }}" /> {{ game.jeu }}
             </legend><br/>
             {% block formContent %}
             {% endblock %}

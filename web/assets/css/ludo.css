@@ -38,6 +38,14 @@ img.profil {
 	margin-bottom: 3px;
 }
 
+img.profil-small {
+    height: 48px;
+    border: none;
+    margin-right: -2px;
+    margin-left: -2px;
+    margin-bottom: 3px;
+}
+
 .form-signin {
     max-width: 260px;
     margin: 0 auto 10px;
@@ -57,4 +65,18 @@ img.profil {
 
 input.pts {
     text-align: right;
+}
+
+label.autoRank {
+    margin-top:20px;
+}
+
+img.scores {
+    float:left;
+    margin-right: 10px;
+    padding-top: 5px;
+}
+
+button.btn-end {
+    margin-right: 5px;
 }

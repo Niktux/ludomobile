@@ -1,0 +1,18 @@
+{% extends 'layouts/addPlay.twig' %}
+
+{% block formAction %}/games/{{ game.idjeu }}/save{% endblock %}
+
+{% block formClass %}form-inline{% endblock %}
+
+{% block formContent %}
+
+{{ message }}
+
+<div class="form-actions">
+    <button type="submit" class="btn btn-success">Modifier</button>
+    <button type="submit" class="btn btn-primary">Autre partie</button><br><br>
+    <a href="/" class="btn ">Retour</a>
+    <hr>
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+</div>
+{% endblock %}

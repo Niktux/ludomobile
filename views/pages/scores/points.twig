@@ -1,7 +1,7 @@
 {% extends 'layouts/addPlay.twig' %}
 {% import "macros/rank.twig" as selectors %}
 
-{% block formAction %}/games/{{ game.idjeu }}/scores{% endblock %}
+{% block formAction %}/games/{{ game.idjeu }}/save{% endblock %}
 
 {% block formClass %}form-inline{% endblock %}
 
@@ -12,17 +12,11 @@
         {% set playerRank = "player" ~ loop.index  %}
 
         <li class="media">
-            <a class="pull-left" href="#">
-                <img class="profil media-object" src="{{ player.image }}">
-            </a>
+            <img class="profil-small media-object scores" src="{{ player.image }}">
             <div class="media-body">
                 <h4 class="media-heading">{{ player.name }}</h4>
                 <input type="hidden" name="{{ playerRank }}" value="{{ player.id }}"}>
-                <div class="btn-group span2" data-toggle="buttons-radio">
-                    <button type="button" class="btn btn-success">G</button>
-                    <button type="button" class="btn btn-danger active">P</button>
-                </div>
-                <input class="input-small pts" type="text" name="pts" value="0"/><span class="help-inline">{{ game.pts_unit }}</span>
+                <input class="input-small pts" type="number" name="pts{{ loop.index }}" value=""/><span class="help-inline">{{ game.pts_unit }}</span>
                 {{ selectors.rank(players|length, 'rank' ~ player.id) }}
             </div>
         </li>
@@ -30,7 +24,12 @@
 </ul>
 
 <div class="form-actions">
+    <input type="hidden" name="nbPlayers" value ="{{ players|length }}">
     <button type="submit" class="btn btn-primary">Enregistrer</button>
     <a href="/" class="btn ">Retour</a>
+    <label class="checkbox autoRank">
+        <input type="checkbox" name="auto" value="" checked="checked">
+        Classement auto
+    </label>
 </div>
 {% endblock %}

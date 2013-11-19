@@ -144,7 +144,12 @@ class Games
             return $this->domain . 'images/profil.gif';
         }
         
-        return  str_replace('./', $this->domain, $imagePath);
+        if(stripos($imagePath, './img_copied/') !== false)
+        {
+            return str_replace('./img_copied/', '/assets/img_copied/', $imagePath);
+        }
+        
+        return str_replace('./', $this->domain, $imagePath);
     }
     
     private function filterName($name)

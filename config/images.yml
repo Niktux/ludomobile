@@ -1,0 +1,6 @@
+driver: gd
+hashDepth: 3
+formats:
+  game_thumbnail:
+    resize: 100x100
+    quality: 90
