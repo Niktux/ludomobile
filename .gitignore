@@ -14,4 +14,4 @@ web/var/*
 .project
 .settings
 
-migrations.sql
+migration.sql
