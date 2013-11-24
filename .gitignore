@@ -13,3 +13,5 @@ web/var/*
 .buildpath
 .project
 .settings
+
+migrations.sql
