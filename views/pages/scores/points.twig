@@ -17,11 +17,15 @@
                 <h4 class="media-heading">{{ player.name }}</h4>
                 <input type="hidden" name="{{ playerRank }}" value="{{ player.id }}"}>
                 <input class="input-small pts" type="number" name="pts{{ loop.index }}" value=""/><span class="help-inline">{{ game.pts_unit }}</span>
-                {{ selectors.rank(players|length, 'rank' ~ player.id) }}
+                {{ selectors.rank(players|length, 'rank' ~ loop.index) }}
             </div>
         </li>
     {% endfor %}
 </ul>
+
+{% for field, value in postFields %}
+    <input type="hidden" name="{{ field }}" value="{{ value }}" />
+{% endfor %}
 
 <div class="form-actions">
     <input type="hidden" name="nbPlayers" value ="{{ players|length }}">
@@ -32,4 +36,28 @@
         Classement auto
     </label>
 </div>
+{% endblock %}
+
+{% block jsFooter %}
+    <script type="text/javascript">
+    <!--
+        $(function() {
+            $('div.btn-group[data-toggle-name]').each(function() {
+                var group = $(this);
+                var form = group.parents('form').eq(0);
+                var name = group.attr('data-toggle-name');
+                var hidden = $('input[name="' + name + '"]', form);
+                $('button', group).each(function() {
+                    var button = $(this);
+                    button.on('click', function() {
+                        hidden.val($(this).val());
+                    });
+                    if (button.val() == hidden.val()) {
+                        button.addClass('active');
+                    }
+                });
+            });
+        });
+    //-->
+    </script>
 {% endblock %}

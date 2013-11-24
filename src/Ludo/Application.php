@@ -69,7 +69,7 @@ class Application extends \Silex\Application
             'db.options' => array(
                 'driver'   => 'pdo_mysql',
                 'host'     => 'localhost',
-                'dbname'   => 'ludo_mobile',
+                'dbname'   => $this->configuration['db']['name'],
                 'user'     => $this->configuration['db']['user'],
                 'password' => $this->configuration['db']['password'],
                 'charset'  => 'utf8'

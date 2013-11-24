@@ -1,6 +1,6 @@
 {% macro integerSelector(imin, imax, name) %}
     {% if imax - imin < 6 %}
-        <div class="btn-group" data-toggle="buttons-radio" data-toggle-name="nbPlayers" >
+        <div class="btn-group" data-toggle="buttons-radio" data-toggle-name="{{ name }}" >
             {% for j in imin..imax %}
                 <button type="button" class="btn{% if loop.first %} active{% endif %}" value="{{ j }}">{{ j }}</button>
             {% endfor %}

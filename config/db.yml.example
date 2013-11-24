@@ -1,4 +1,5 @@
 db:
-  user : ludo_user
+  user: ludo_user
   password: myPassword
+  name: mydb
 domain: http://www.example.org

@@ -134,6 +134,8 @@ class Games
             $game['name'] = $this->filterName($game['name']);
         }
         
+        $game['method_pts'] = '';
+        
         return $game;
     }
     
@@ -167,5 +169,52 @@ class Games
         );
         
         return $this->convertRows($this->db->fetchAll($query));
+    }
+    
+    public function insertPlay($gameId, $nbPlayers, $date, array $extensions = array())
+    {
+        $this->db->insert('ludo_partie', array(
+        	'idjeu' => $gameId,
+            'date_partie' => $date,
+            'nb_joueurs' => $nbPlayers,
+            'nb_parties' => 1,
+            'en_ligne' => 0
+        ));
+        
+        $playId = $this->db->lastInsertId();
+        
+        if($playId <= 0)
+        {
+            throw new \RuntimeException('Error while trying to insert new play');
+        }
+        
+        foreach($extensions as $extension)
+        {
+            // != -1
+            if($extension > 0)
+            {
+                $this->db->insert('ludo_partie_extension', array(
+                	'idpartie' => $playId,
+                    'idextension' => $extension
+                ));
+            }
+        }
+        
+        return $playId;
+    }
+    
+    public function savePlayersScore($playId, array $players)
+    {
+        foreach($players as $player)
+        {
+            $this->db->insert('ludo_partie_joueur', array(
+                'idpartie' => $playId,
+                'num_partie' => 1,
+                'idjoueur' => $player['id'],
+                'idrespartie' => $player['rank'] === 1 ? $player['rank'] : 3,
+                'classement' => $player['rank'],
+                'points' => $player['pts']
+            ));
+        }    
     }
 }

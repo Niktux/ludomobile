@@ -55,6 +55,7 @@ class GameController
         
         $html = $this->twig->render($template, array(
             'game' => $game,
+            'postFields' => $this->request->request->all(),
             'players' => $this->games->fetchPlayers(explode('j', $this->request->get('profil'))),
         ));
         
@@ -72,12 +73,17 @@ class GameController
             
             if(is_numeric($nbPlayers) && $nbPlayers > 0)
             {
-                for($n = 1; $n <= $nbPlayers; $n++)
+                $extensions = array();
+                if($this->request->request->has('extensions'))
                 {
-                  //  var_dump($postFields["pts$n"]);
-                  // see iphone_profil.php
-                  // and iphone_assoc_joueurs_classement.php
+                    $extensionList = $this->request->request->get('extensions');
+                    $extensions = explode(',', $extensionList);
                 }
+                    
+                $playId = $this->games->insertPlay($gameId, $nbPlayers, $this->request->request->get('date'), $extensions);
+                $players = $this->extractDataFromRequest($gameId, $postFields);
+                //var_dump($players);
+                $this->games->savePlayersScore($playId, $players);
                 
                 $message = "Partie enregistrée";
             }
@@ -88,5 +94,51 @@ class GameController
             'postFields' => $postFields,
             'message' => $message,
         )));
+    }
+    
+    private function extractDataFromRequest($gameId, array $postFields)
+    {
+        $nbPlayers = $postFields['nbPlayers'];
+        $players = array();
+        
+        for($i = 1; $i <= $nbPlayers; $i++)
+        {
+            $playerData = array(
+            	'id' => (int) $postFields['player' . $i],
+                'pts' => (int) isset($postFields['pts' . $i]) ? $postFields['pts' . $i] : 0 ,
+                'rank' => (int) $postFields['rank' . $i],
+            );
+            
+            $players[] = $playerData;
+        }
+        
+        if(isset($postFields['auto']))
+        {
+            $points = array();
+            foreach($postFields as $name => $value)
+            {
+                if(stripos($name, 'pts') === 0)
+                {
+                    $points[] = $value;
+                }
+            }
+        
+            $game = $this->games->fetchById($gameId);
+            if(isset($game['mthf_ranking']) && $game['mthf_ranking'] === 0)
+            {
+                rsort($points);    
+            }
+            else
+            {
+                sort($points);
+            }
+            
+            foreach($players as $key => $player)
+            {
+                $players[$key]['rank'] = array_search($player['pts'], $points) + 1; 
+            }
+        }
+        
+        return $players;
     }
 }

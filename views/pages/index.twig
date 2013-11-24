@@ -12,6 +12,9 @@
                             <input class="span2" id="inputIcon" type="text" name="q">
                         </div>
                         <button type="submit" class="btn">Go</button>
+                        <br/><br/>
+                        <button id="extensions" type="button" data-toggle="button" class="btn btn-info">Inclure les extensions</button>
+                        <input id="extensions" name="extensions" type="hidden" value="0">
                     </div>
                 </div>
             </form>
@@ -59,4 +62,25 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block jsFooter %}
+    <script type="text/javascript">
+    <!--
+        $(function() {
+
+        	$('button#extensions').click(function(){
+            	if($('input#extensions').val() == 0)
+            	{
+            		$('input#extensions').val(1);
+            	}
+            	else
+            	{
+            		$('input#extensions').val(0);
+            	}
+            });
+            
+        });
+    //-->
+    </script>
 {% endblock %}

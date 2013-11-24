@@ -76,8 +76,10 @@ class SearchController
     
     private function searchResultAction(Pattern $searchPattern)
     {
+        $includeExtensions = $this->request->request->getInt('extensions') === 1;
+        
         $html = $this->twig->render('pages/search.twig', array(
-            'games' => $this->searchEngine->gamesByName($searchPattern)
+            'games' => $this->searchEngine->gamesByName($searchPattern, $includeExtensions)
         ));
         
         return new Response($html);
