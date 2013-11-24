@@ -124,13 +124,13 @@ class GameController
             }
         
             $game = $this->games->fetchById($gameId);
-            if(isset($game['mthf_ranking']) && $game['mthf_ranking'] === 0)
+            if(isset($game['mthd_ranking']) && intval($game['mthd_ranking']) === 0)
             {
-                rsort($points);    
+                sort($points);
             }
             else
             {
-                sort($points);
+                rsort($points);    
             }
             
             foreach($players as $key => $player)
