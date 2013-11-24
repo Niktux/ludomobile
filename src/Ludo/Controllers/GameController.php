@@ -55,7 +55,12 @@ class GameController
         
         $html = $this->twig->render($template, array(
             'game' => $game,
-            'postFields' => $this->request->request->all(),
+            'postFields' => array(
+                'profil' => $this->request->request->get('profil'),
+                'nbPlayers' => $this->request->request->get('nbPlayers'),
+                'extensions' => $this->request->request->get('extensions'),
+                'date' => $this->request->request->get('date'),
+            ),
             'players' => $this->games->fetchPlayers(explode('j', $this->request->get('profil'))),
         ));
         
@@ -140,5 +145,16 @@ class GameController
         }
         
         return $players;
+    }
+    
+    public function nextAction($gameId)
+    {
+        if($this->request->request->has('otherPlay'))
+        {
+            return $this->scoresAction($gameId);
+        }
+            
+        //var_dump($_POST);
+        die('EDIT & DELETE are not implemented yet');
     }
 }

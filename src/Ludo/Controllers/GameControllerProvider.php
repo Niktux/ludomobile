@@ -26,6 +26,8 @@ class GameControllerProvider implements ControllerProviderInterface
                     ->assert('gameId', '\d+');
         $controllers->post('/save', 'game.controller:saveAction')
                     ->assert('gameId', '\d+');
+        $controllers->post('/next', 'game.controller:nextAction')
+                    ->assert('gameId', '\d+');
         
         return $controllers;
     }

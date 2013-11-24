@@ -1,6 +1,6 @@
 {% extends 'layouts/addPlay.twig' %}
 
-{% block formAction %}/games/{{ game.idjeu }}/save{% endblock %}
+{% block formAction %}/games/{{ game.idjeu }}/next{% endblock %}
 
 {% block formClass %}form-inline{% endblock %}
 
@@ -8,11 +8,15 @@
 
 {{ message }}
 
+{% for field, value in postFields %}
+    <input type="hidden" name="{{ field }}" value="{{ value }}" />
+{% endfor %}
+
 <div class="form-actions">
-    <button type="submit" class="btn btn-success">Modif</button>
-    <button type="submit" class="btn btn-primary">Autre Partie</button>
+    <button name="edit" type="submit" class="btn btn-success">Modif</button>
+    <button name="otherPlay" type="submit" class="btn btn-primary">Autre Partie</button>
     <a href="/" class="btn ">Retour</a>
     <hr>
-    <button type="submit" class="btn btn-danger">Supprimer</button>
+    <button name="delete" type="submit" class="btn btn-danger">Supprimer</button>
 </div>
 {% endblock %}
