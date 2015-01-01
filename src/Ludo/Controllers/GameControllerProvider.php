@@ -22,6 +22,8 @@ class GameControllerProvider implements ControllerProviderInterface
                     ->assert('gameId', '\d+');
         $controllers->post('/select/players', 'game.controller:selectPlayersAction')
                     ->assert('gameId', '\d+');
+        $controllers->post('/select/players/oneByOne', 'game.controller:selectPlayersOneByOneAction')
+                    ->assert('gameId', '\d+');
         $controllers->post('/scores', 'game.controller:scoresAction')
                     ->assert('gameId', '\d+');
         $controllers->post('/save', 'game.controller:saveAction')

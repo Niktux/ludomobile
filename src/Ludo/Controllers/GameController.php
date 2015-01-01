@@ -11,29 +11,29 @@ class GameController
         $request,
         $games,
         $twig;
-    
+
     public function __construct(\Twig_Environment $twig, \Ludo\Model\Games $games, Request $request)
     {
         $this->request = $request;
         $this->twig = $twig;
         $this->games = $games;
     }
-    
+
     public function postAddPlayAction($gameId)
     {
         return $this->addPlayAction($gameId);
     }
-    
+
     public function addPlayAction($gameId)
     {
         $html = $this->twig->render('pages/addPlay.twig', array(
             'game' => $this->games->fetchById($gameId),
             'extensions' => $this->games->fetchExtensions($gameId)
         ));
-        
+
         return new Response($html);
     }
-    
+
     public function selectPlayersAction($gameId)
     {
         return new Response($this->twig->render('pages/addPlay/selectPlayers.twig', array(
@@ -42,17 +42,36 @@ class GameController
             'profiles' => $this->games->fetchProfiles($this->request->request->getInt('nbPlayers'))
         )));
     }
-    
+
+    public function selectPlayersOneByOneAction($gameId)
+    {
+        $profil = '';
+        if($this->request->request->has('profil'))
+        {
+            $profil = $this->request->request->get('profil');
+        }
+
+        return new Response($this->twig->render('pages/addPlay/selectPlayersOneByOne.twig', array(
+            'game' => $this->games->fetchById($gameId),
+            'postFields' => array(
+                'profil' => $profil,
+                'nbPlayers' => $this->request->request->get('nbPlayers'),
+                'extensions' => $this->request->request->get('extensions'),
+                'date' => $this->request->request->get('date'),
+            ),
+        )));
+    }
+
     public function scoresAction($gameId)
     {
         $template = 'pages/scores/gagnantPerdant.twig';
         $game = $this->games->fetchById($gameId);
-        
+
         if($game['has_points'] === '1')
         {
             $template = 'pages/scores/points.twig';
         }
-        
+
         $html = $this->twig->render($template, array(
             'game' => $game,
             'postFields' => array(
@@ -63,10 +82,10 @@ class GameController
             ),
             'players' => $this->games->fetchPlayers(explode('j', $this->request->get('profil'))),
         ));
-        
+
         return new Response($html);
     }
-    
+
     public function saveAction($gameId)
     {
         $postFields = $this->request->request->all();
@@ -75,7 +94,7 @@ class GameController
         if(isset($postFields['nbPlayers']))
         {
             $nbPlayers = trim($postFields['nbPlayers']);
-            
+
             if(is_numeric($nbPlayers) && $nbPlayers > 0)
             {
                 $extensions = array();
@@ -84,28 +103,28 @@ class GameController
                     $extensionList = $this->request->request->get('extensions');
                     $extensions = explode(',', $extensionList);
                 }
-                    
+
                 $playId = $this->games->insertPlay($gameId, $nbPlayers, $this->request->request->get('date'), $extensions);
                 $players = $this->extractDataFromRequest($gameId, $postFields);
                 //var_dump($players);
                 $this->games->savePlayersScore($playId, $players);
-                
+
                 $message = "Partie enregistrée";
             }
         }
-        
+
         return new Response($this->twig->render('pages/addPlay/confirmation.twig', array(
             'game' => $this->games->fetchById($gameId),
             'postFields' => $postFields,
             'message' => $message,
         )));
     }
-    
+
     private function extractDataFromRequest($gameId, array $postFields)
     {
         $nbPlayers = $postFields['nbPlayers'];
         $players = array();
-        
+
         for($i = 1; $i <= $nbPlayers; $i++)
         {
             $playerData = array(
@@ -113,10 +132,10 @@ class GameController
                 'pts' => (int) isset($postFields['pts' . $i]) ? $postFields['pts' . $i] : 0 ,
                 'rank' => (int) $postFields['rank' . $i],
             );
-            
+
             $players[] = $playerData;
         }
-        
+
         if(isset($postFields['auto']))
         {
             $points = array();
@@ -127,7 +146,7 @@ class GameController
                     $points[] = $value;
                 }
             }
-        
+
             $game = $this->games->fetchById($gameId);
             if(isset($game['mthd_ranking']) && intval($game['mthd_ranking']) === 0)
             {
@@ -135,25 +154,25 @@ class GameController
             }
             else
             {
-                rsort($points);    
+                rsort($points);
             }
-            
+
             foreach($players as $key => $player)
             {
-                $players[$key]['rank'] = array_search($player['pts'], $points) + 1; 
+                $players[$key]['rank'] = array_search($player['pts'], $points) + 1;
             }
         }
-        
+
         return $players;
     }
-    
+
     public function nextAction($gameId)
     {
         if($this->request->request->has('otherPlay'))
         {
             return $this->scoresAction($gameId);
         }
-            
+
         //var_dump($_POST);
         die('EDIT & DELETE are not implemented yet');
     }

@@ -4,3 +4,6 @@ formats:
   game_thumbnail:
     resize: 100x100
     quality: 90
+  players:
+    resize: 49x58
+    quality: 95 

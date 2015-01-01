@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container">
-    <form class="{% block formClass %}{% endblock %}" method="post" action="{% block formAction %}/games/{{ game.idjeu }}/select/players{% endblock %}">
+    <form id="gameForm" class="{% block formClass %}{% endblock %}" method="post" action="{% block formAction %}/games/{{ game.idjeu }}/select/players{% endblock %}">
         <fieldset>
             <legend>
                 <img class="game_thumbnail" src="{{ game.thumbnail|image('game_thumbnail') }}" /> {{ game.jeu }}
@@ -11,5 +11,7 @@
             {% endblock %}
       </fieldset>
     </form>
+    {% block footer %}
+    {% endblock %}
 </div>
 {% endblock %}

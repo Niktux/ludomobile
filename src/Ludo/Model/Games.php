@@ -6,13 +6,13 @@ class Games
 {
     private
         $db;
-    
+
     public function __construct(\Doctrine\DBAL\Connection $db, $domain)
     {
         $this->db = $db;
         $this->domain = rtrim($domain, '/') . '/';
     }
-    
+
     public function fetchById($gameId)
     {
         $query = sprintf(
@@ -21,10 +21,10 @@ class Games
              WHERE idjeu = %d",
             $gameId
         );
-        
+
         return $this->convertRow($this->db->fetchAssoc($query));
     }
-    
+
     public function fetchExtensions($gameId)
     {
         $query = sprintf(
@@ -34,20 +34,20 @@ class Games
              WHERE idjeudebase = %d",
             $gameId
         );
-        
+
         return $this->convertRows($this->db->fetchAll($query));
     }
-    
+
     public function fetchProfiles($nbPlayers, $nbProfiles = 13)
     {
         $profiles = $this->fetchLastUsedProfile($nbPlayers);
-        
+
         $lastProfil = '';
         if(isset($profiles[0]['profil']))
         {
             $lastProfil = $profiles[0]['profil'];
         }
-        
+
         $query = sprintf(
             "SELECT profil, profil_image,  profil_nom, COUNT(*) AS nb_parties
     		 FROM (
@@ -70,9 +70,9 @@ class Games
             $lastProfil,
             $nbProfiles - 1
         );
-        
+
         $profiles = array_merge($profiles, $this->db->fetchAll($query));
-        
+
         array_walk($profiles, function(&$profile){
             $profile['profilId'] = str_replace(',', 'j', $profile['profil']);
             $profile['noms'] = explode(',', $profile['profil_nom']);
@@ -84,10 +84,10 @@ class Games
                }
             });
         });
-        
+
         return $profiles;
     }
-    
+
     public function fetchLastUsedProfile($nbPlayers)
     {
         $query = sprintf(
@@ -103,22 +103,22 @@ class Games
              LIMIT 0,1",
             $nbPlayers
         );
-        
+
         return $this->db->fetchAll($query);
     }
-    
+
     public function convertRows(array $games)
     {
         $filteredResult = array();
-    
+
         foreach($games as $game)
         {
             $filteredResult[] = $this->convertRow($game);
         }
-    
+
         return $filteredResult;
     }
-    
+
     public function convertRow($game)
     {
         if(isset($game['thumbnail']))
@@ -133,32 +133,32 @@ class Games
         {
             $game['name'] = $this->filterName($game['name']);
         }
-        
+
         $game['method_pts'] = '';
-        
+
         return $game;
     }
-    
+
     private function translateImagePath($imagePath)
     {
         if(empty($imagePath))
         {
             return $this->domain . 'images/profil.gif';
         }
-        
+
         if(stripos($imagePath, './img_copied/') !== false)
         {
             return str_replace('./img_copied/', '/assets/img_copied/', $imagePath);
         }
-        
+
         return str_replace('./', $this->domain, $imagePath);
     }
-    
+
     private function filterName($name)
     {
         return str_replace('&apos;', "'", $name);
     }
-    
+
     public function fetchPlayers(array $ids)
     {
         $query = sprintf(
@@ -167,10 +167,10 @@ class Games
             WHERE idjoueur IN (%s)",
             implode(',', $ids)
         );
-        
+
         return $this->convertRows($this->db->fetchAll($query));
     }
-    
+
     public function insertPlay($gameId, $nbPlayers, $date, array $extensions = array())
     {
         $this->db->insert('ludo_partie', array(
@@ -180,14 +180,14 @@ class Games
             'nb_parties' => 1,
             'en_ligne' => 0
         ));
-        
+
         $playId = $this->db->lastInsertId();
-        
+
         if($playId <= 0)
         {
             throw new \RuntimeException('Error while trying to insert new play');
         }
-        
+
         foreach($extensions as $extension)
         {
             // != -1
@@ -199,10 +199,10 @@ class Games
                 ));
             }
         }
-        
+
         return $playId;
     }
-    
+
     public function savePlayersScore($playId, array $players)
     {
         foreach($players as $player)
@@ -215,6 +215,31 @@ class Games
                 'classement' => $player['rank'],
                 'points' => $player['pts']
             ));
-        }    
+        }
+    }
+
+    public function fetchPlayersByFirstLetters(array $letters)
+    {
+        if(empty($letters))
+        {
+            return array();
+        }
+
+        $lettersSql = implode(', ', array_map(function($item) {
+            return "'$item'";
+        }, $letters));
+
+        $qb = $this->db->createQueryBuilder();
+        $st = $qb
+            ->select('j.idjoueur', 'nom', 'image AS photo', 'image', 'COUNT(idpartie) AS parties')
+            ->from('ludo_joueur', 'j')
+            ->innerJoin('j', 'ludo_partie_joueur', 'pj', 'j.idjoueur = pj.idjoueur')
+            ->where("substr(nom, 1, 1) IN ($lettersSql)")
+            ->groupBy('j.idjoueur')
+            ->orderBy('anonyme', 'ASC')
+            ->addOrderBy('parties', 'DESC')
+            ->execute();
+
+        return $this->convertRows($st->fetchAll(\PDO::FETCH_ASSOC));
     }
 }

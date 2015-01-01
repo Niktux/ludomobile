@@ -38,6 +38,22 @@ img.profil {
 	margin-bottom: 3px;
 }
 
+div.player {
+	float: left;
+	margin-right: 10px;
+	min-height: 38px;
+	min-width: 50px;
+	max-width: 50px;
+}
+
+div.player-text {
+	border: 1px dashed #ccc;
+	font-size: 10px;
+	padding-top: 20px;
+	text-align:center;
+	
+}
+
 img.profil-small {
     height: 48px;
     border: none;

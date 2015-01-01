@@ -1,0 +1,99 @@
+{% extends 'layouts/addPlay.twig' %}
+
+{% block formAction %}/games/{{ game.idjeu }}/scores{% endblock %}
+
+{% block formContent %}
+        <div class="row">
+            <div class="selectedPlayers"></div>
+            <input type="hidden" id="nbPlayers" value="0" />
+        </div>
+        <div class="row selectors">
+            <div class="col-md12">
+                <div class="btn-toolbar" role="toolbar" aria-label="letters">
+                    <div class="btn-group" role="group" aria-label="aj">
+                        <button type="button" class="btn btn-large btn-letters" data-letters="ab">ab</button>
+                        <button type="button" class="btn btn-large btn-letters" data-letters="cd">cd</button>
+                        <button type="button" class="btn btn-large btn-letters" data-letters="efg">efg</button>
+                        <button type="button" class="btn btn-large btn-letters" data-letters="hij">hij</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row selectors">
+            <div class="col-md12">
+                <div class="btn-toolbar" role="toolbar" aria-label="letters">
+                    <div class="btn-group btn-group-lg" role="group" aria-label="kz">
+                        <button type="button" class="btn btn-large btn-letters" data-letters="klm">klm</button>
+                        <button type="button" class="btn btn-large btn-letters" data-letters="nopqr">n..r</button>
+                        <button type="button" class="btn btn-large btn-letters" data-letters="s">s</button>
+                        <button type="button" class="btn btn-large btn-letters" data-letters="tuvwxyz">t..z</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="players selectors">
+        </div>
+
+    {% for field, value in postFields %}
+        <input type="hidden" name="{{ field }}" value="{{ value }}" />
+    {% endfor %}
+{% endblock %}
+
+{% block jsFooter %}
+    <script>
+    $(function () {
+        $('button.btn-letters').click(function () {
+            var letters = $(this).attr('data-letters');
+            $.ajax({
+                url: "{{ path('players_letters', {'letters': ''}) }}" + letters,
+                success: function(json) {
+                    $('div.players').html('');
+                    $.each(json, function() {
+                        if(this.photo.length !== 0)
+                        {
+                            var html = '<img src="' + this.image + '" class="profil profil-one" />'
+                            $('div.players').append('<div class="player player-img" data-id="' + this.idjoueur + '">' + html + '</div>');
+                        }
+                    });
+                    $('div.players').append('<div> </div>');
+                    $.each(json, function() {
+                        if(this.photo.length === 0)
+                        {
+                            var html = '<div class="profil-one">' + this.nom + '</div>';
+                            $('div.players').append('<div class="player player-text" data-id="' + this.idjoueur + '">' + html + '</div>');
+                        }
+                    });
+
+                    $('div.player').click(function () {
+                        var id = $(this).attr('data-id');
+                        var profilField = $('input[name=profil]');
+                        var profil = profilField.val();
+
+                        var profilAppend = '';
+                        if(profil.length !== 0)
+                        {
+                        	profilAppend = 'j';
+                        }
+                        profilAppend += id;
+
+                        profilField.val(profil + profilAppend);
+
+                        $('div.selectedPlayers').append($(this).clone());
+
+                        var nbj = $('input#nbPlayers').val();
+                        nbj = parseInt(nbj) + 1;
+                        $('input#nbPlayers').val(nbj);
+
+                        var maxNbj = parseInt($('input[name=nbPlayers]').val());
+
+                        if(nbj >= maxNbj)
+                        {
+                            $('form#gameForm').submit();
+                        }
+                    });
+                }
+            });
+        });
+    });
+    </script>
+{% endblock %}

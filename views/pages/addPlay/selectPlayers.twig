@@ -6,7 +6,7 @@
     {% for profile in profiles %}
         {% for image in profile.images %}
            {% set name = profile.noms[loop.index0] %}
-           <img class="profil" src="{{ image }}" alt="{{ name }}" title="{{ name }}">
+           <img class="profil" src="{{ image|image('players') }}" alt="{{ name }}" title="{{ name }}">
         {% endfor %}
         <button type="submit" class="btn btn-mini" name="profil" value="{{ profile.profilId }}"><i class="icon-ok"></i></button>
         <br/>
@@ -15,9 +15,14 @@
     {% for field, value in postFields %}
         <input type="hidden" name="{{ field }}" value="{{ value }}" />
     {% endfor %}
-    
-    <hr>
-    
-    TODO choix des joueurs un par un
-    
+{% endblock %}
+
+{% block footer %}
+<hr>
+<form method="post" action="/games/{{ game.idjeu }}/select/players/oneByOne">
+    {% for field, value in postFields %}
+        <input type="hidden" name="{{ field }}" value="{{ value }}" />
+    {% endfor %}
+    <button type="submit" class="btn" name="oneByOne" value=""><i class="icon-edit"></i> Sélectionner manuellement</button>
+</form>
 {% endblock %}
