@@ -61,7 +61,7 @@ class Engine
                  WHERE nb_joueurs = $nbj
              ) AS meeple USING (idjeu)
              LEFT JOIN (
-                 SELECT idjeu, MAX(date_partie) AS last_partie, COUNT(*) AS nb_parties
+                 SELECT idjeu, MAX(date_partie) AS last_partie, SUM(nb_parties) AS nb_parties
                  FROM ludo_partie
                  GROUP BY idjeu
              ) AS partie USING (idjeu)
@@ -70,7 +70,7 @@ class Engine
              AND statut <> 1
              %s
              %s
-             ORDER BY date_achat DESC, jeu ASC",
+             ORDER BY statut ASC, date_achat DESC, jeu ASC",
             $criteriasSQL,
             $includeExtensions ? '' : "AND idjeu NOT IN ( SELECT DISTINCT idextension FROM ludo_extension )"
         );
