@@ -96,3 +96,7 @@ img.scores {
 button.btn-end {
     margin-right: 5px;
 }
+
+a.btn-full {
+    width: 90%;
+}

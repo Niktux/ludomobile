@@ -13,5 +13,6 @@ $app->enableProfiling();
 $app->mount('/', new Ludo\Controllers\SearchControllerProvider());
 $app->mount('/games/{gameId}', new Ludo\Controllers\GameControllerProvider());
 $app->mount('/ajax/', new Ludo\Controllers\AjaxControllerProvider());
+$app->mount('/wizard/', new Ludo\Controllers\WizardControllerProvider());
 
 $app->run();

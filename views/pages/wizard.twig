@@ -1,0 +1,27 @@
+{% extends 'layouts/main.twig' %}
+
+{% block content %}
+
+    {%  set buttons = [
+      {'type': 'recent', 'style': 'success', 'text': 'Jouer à un jeu récent'},
+      {'type': 'new', 'style': 'info', 'text': 'Jouer à un nouveau jeu'},
+      {'type': 'renew', 'style': 'primary', 'text': 'Rejouer à un nouveau jeu'},
+      {'type': 'known', 'style': 'warning', 'text': 'Jouer à un jeu dont les règles sont connues'},
+      {'type': 'past', 'style': 'danger', 'text': "Ca fait longtemps que je n'ai pas joué à ça !"},
+      {'type': 'oldies', 'style': 'inverse', 'text': "Je les aimais bien à l'époque"},
+      {'type': 'sure', 'style': 'info', 'text': "Une valeur sûre"},
+      {'type': 'default', 'style': 'default', 'text': "Peu importe"},
+    ] %}
+
+<div class="container">
+  {% for button in buttons %}
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <p>
+        <a href="/wizard/step/2/type/{{ button.type }}" class="btn btn-large btn-full btn-{{ button.style }}">{{ button.text }}</a>
+      </p>
+    </div>
+  </div>
+  {%  endfor %}
+</div>
+{% endblock %}

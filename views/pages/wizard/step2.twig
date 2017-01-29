@@ -1,0 +1,24 @@
+{% extends 'layouts/main.twig' %}
+
+{% block content %}
+    {%  set buttons = [
+      {'duration': '15', 'style': 'success', 'text': 'Jeu très rapide'},
+      {'duration': '30', 'style': 'info', 'text': "15-30 minutes"},
+      {'duration': '60', 'style': 'warning', 'text': "Maximum 1h"},
+      {'duration': '100', 'style': 'primary', 'text': "On a le temps"},
+      {'duration': '120', 'style': 'danger', 'text': "Un jeu consistant chef !"},
+      {'duration': '999', 'style': 'default', 'text': 'Peu importe'},
+    ] %}
+
+<div class="container">
+  {% for button in buttons %}
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <p>
+        <a href="/wizard/step/3/type/{{ type }}/duration/{{ button.duration }}" class="btn btn-large btn-full btn-{{ button.style }}">{{ button.text }}</a>
+      </p>
+    </div>
+  </div>
+  {%  endfor %}
+</div>
+{% endblock %}
