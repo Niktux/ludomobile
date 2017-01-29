@@ -98,7 +98,7 @@ class WizardController
             'coop' => " AND idjeu IN ( SELECT idjeu FROM ludo_mecanisme_jeu WHERE idmecanisme = 17 ) ",
             'lulu' => " AND idjeu IN ( SELECT idjeu FROM ludo_critere_jeu WHERE idcritere = 29 ) ",
             'complexe' => " AND idcomplexite = 4 ",
-            'deux' => " AND idjeu IN ( SELECT idjeu FROM ludo_critere_jeu WHERE idcritere = 26 ) ",
+            'deux' => " AND (idjeu IN ( SELECT idjeu FROM ludo_critere_jeu WHERE idcritere = 26 ) OR (jmin = 2 AND jmax = 2) )",
         ];
 
         if($envy !== 'default')
