@@ -67,7 +67,7 @@ class Engine
              ) AS partie USING (idjeu)
              WHERE jmax >= $nbj AND jmin <= $nbj
              AND (color = 'green' OR color IS NULL)
-             AND statut = 0
+             AND statut <> 1
              %s
              %s
              ORDER BY date_achat DESC, jeu ASC",
