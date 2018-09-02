@@ -9,7 +9,8 @@ var/cache/*
 var/logs/*
 web/var/*
 
-# Eclipse files
+# IDE files
+.idea/
 .buildpath
 .project
 .settings

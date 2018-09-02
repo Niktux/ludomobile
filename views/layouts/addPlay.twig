@@ -5,7 +5,10 @@
     <form id="gameForm" class="{% block formClass %}{% endblock %}" method="post" action="{% block formAction %}/games/{{ game.idjeu }}/select/players{% endblock %}">
         <fieldset>
             <legend>
-                <img class="game_thumbnail" src="{{ game.thumbnail|image('game_thumbnail') }}" /> {{ game.jeu }}
+                <a href="http://nico.deboo.fr/iphone_viewgame.php?idj={{ game.idjeu }}">
+                    <img class="game_thumbnail" src="{{ game.thumbnail|image('game_thumbnail') }}" />
+                </a>
+                {{ game.jeu }}
             </legend><br/>
             {% block formContent %}
             {% endblock %}
